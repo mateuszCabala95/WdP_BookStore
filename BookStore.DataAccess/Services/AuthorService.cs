@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookStore.Domain.Entities;
 using BookStore.Domain.Services;
+using BookStore.UI.Dto_s;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.DataAccess.Services
@@ -32,10 +33,14 @@ namespace BookStore.DataAccess.Services
             return result;
         }
 
-        public async Task<Author> CreateAsync(Author entity)
+        public async Task<Author> CreateAsync(AuthorDto entity)
         {
             await using var context = _context;
-            var result = context.Set<Author>().Add(entity);
+            var result = context.Set<Author>().Add(new Author
+            {
+                FirstName = entity.FirstName,
+                LastName = entity.LastName
+            });
             await context.SaveChangesAsync();
             return result.Entity;
         }

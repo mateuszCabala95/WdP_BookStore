@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookStore.Domain.Entities;
 using BookStore.Domain.Services;
+using BookStore.UI.Dto_s;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.DataAccess.Services
@@ -20,7 +21,8 @@ namespace BookStore.DataAccess.Services
             await using var context = _context;
             var result = await context.Set<Book>().ToListAsync();
             
-            return result;        }
+            return result;
+        }
 
         public async Task<Book> GetSingleAsync(int id)
         {
@@ -29,10 +31,14 @@ namespace BookStore.DataAccess.Services
             return result;
         }
 
-        public async Task<Book> CreateAsync(Book entity)
+        public async Task<Book> CreateAsync(BookDto entity)
         {
             await using var context = _context;
-            var result = context.Set<Book>().Add(entity);
+            var result = await context.Set<Book>().AddAsync(new Book
+            {
+                Price = entity.Price,
+                Title = entity.Title,
+            });
             await context.SaveChangesAsync();
             return result.Entity;        
         }
@@ -44,7 +50,7 @@ namespace BookStore.DataAccess.Services
             result.Author = entity.Author ?? result.Author;
             result.Price = entity.Price ?? result.Price;
             result.Title = entity.Title ?? result.Title;
-            result.AuthorId = entity.AuthorId ?? result.AuthorId;
+            // result.AuthorId = entity.AuthorId ?? result.AuthorId;
             context.Set<Book>().Update(result);
             await context.SaveChangesAsync();
             return result;

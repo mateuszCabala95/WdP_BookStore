@@ -9,9 +9,7 @@ namespace BookStore.Domain.Services
         Task<IEnumerable<T>> GetAllAsync();
 
         Task<T> GetSingleAsync(int id);
-
-        Task<T> CreateAsync(T entity);
-
+        
         Task<T> UpdateAsync(int id, T entity);
 
         Task<bool> DeleteAsync(int id);
